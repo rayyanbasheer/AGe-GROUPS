@@ -29,8 +29,8 @@ async function startServer() {
       
       
       const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: messages.map((m: any) => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{text: m.text}] })),
+        model: 'gemini-3.6-flash',
+        contents: messages.filter((m: any, index: number) => !(index === 0 && m.role === 'bot')).map((m: any) => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{text: m.text}] })),
         config: {
           systemInstruction: `You are an expert construction consultant for AGe GROUPS Construction (Tamil Nadu, India). 
           You provide high-level advice on residential, commercial, and engineering projects. 
@@ -58,7 +58,7 @@ async function startServer() {
       const ai = new GoogleGenAI({ apiKey: getApiKey() });
       
       const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-3.6-flash',
         contents: prompt,
         config: {
           systemInstruction: `You are an AI assistant that extracts project details from natural language text and returns a JSON object.
