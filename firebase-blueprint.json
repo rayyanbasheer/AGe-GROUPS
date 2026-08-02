@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "Project": {
+      "title": "Project",
+      "description": "A construction project portfolio item.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the project." },
+        "category": { "type": "string", "description": "The category of the project (e.g., Residential, Commercial)." },
+        "status": { "type": "string", "description": "The status of the project (e.g., Completed, Ongoing)." },
+        "location": { "type": "string", "description": "The location of the project." },
+        "description": { "type": "string", "description": "A brief description of the project." },
+        "imageUrl": { "type": "string", "description": "The URL of the primary project image." },
+        "images": {
+          "type": "array",
+          "description": "List of images with their classification.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string" },
+              "type": { "type": "string", "enum": ["interior", "exterior", "general"] }
+            },
+            "required": ["url", "type"]
+          }
+        },
+        "createdAt": { "type": "timestamp", "description": "When the project was added." }
+      },
+      "required": ["title", "category", "status", "location", "description", "createdAt"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "A customer lead from the contact form or chatbot.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "The name of the customer." },
+        "phone": { "type": "string", "description": "The phone number of the customer." },
+        "message": { "type": "string", "description": "The message or inquiry." },
+        "source": { "type": "string", "description": "Where the lead came from (e.g., 'contact_form', 'chatbot')." },
+        "createdAt": { "type": "timestamp", "description": "When the lead was created." }
+      },
+      "required": ["name", "phone", "message", "source", "createdAt"]
+    }
+  },
+  "firestore": {
+    "projects": {
+      "schema": { "$ref": "#/entities/Project" },
+      "description": "Collection of portfolio projects."
+    },
+    "leads": {
+      "schema": { "$ref": "#/entities/Lead" },
+      "description": "Collection of customer leads."
+    }
+  }
+}
