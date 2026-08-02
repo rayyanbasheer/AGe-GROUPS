@@ -21,14 +21,14 @@ async function startServer() {
   // API Route for Chatbot
   app.post('/api/chat', async (req, res) => {
     try {
-      const { prompt } = req.body;
+      const { messages } = req.body;
       
       
       const ai = new GoogleGenAI({ apiKey: getApiKey() });
       
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: prompt,
+        contents: messages.map((m: any) => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{text: m.text}] })),
         config: {
           systemInstruction: `You are an expert construction consultant for AGe GROUPS Construction (Tamil Nadu, India). 
           You provide high-level advice on residential, commercial, and engineering projects. 

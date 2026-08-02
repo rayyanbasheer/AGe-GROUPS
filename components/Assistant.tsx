@@ -45,7 +45,8 @@ const Assistant: React.FC = () => {
       }
     }
 
-    const response = await getConstructionAdvice(userText);
+    const updatedMessages = [...messages, { role: 'user', text: userText }];
+    const response = await getConstructionAdvice(updatedMessages as any);
     setMessages(prev => [...prev, { role: 'bot', text: response }]);
     setIsLoading(false);
   };

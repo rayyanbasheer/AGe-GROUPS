@@ -1,10 +1,10 @@
 
-export async function getConstructionAdvice(prompt: string) {
+export async function getConstructionAdvice(messages: {role: string, text: string}[]) {
   try {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
+      body: JSON.stringify({ messages })
     });
     
     if (!response.ok) {
