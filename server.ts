@@ -23,14 +23,29 @@ async function startServer() {
   app.post('/api/chat', async (req, res) => {
     try {
       const { messages } = req.body;
+      const ai = new GoogleGenAI({ 
+        apiKey: getApiKey(),
+        httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+      });
       
-      
-      const ai = new GoogleGenAI({ apiKey: getApiKey() });
-      
-      
+      let validContents = [];
+      for (const m of messages) {
+        const role = m.role === 'bot' ? 'model' : 'user';
+        if (validContents.length === 0) {
+          if (role === 'user') validContents.push({ role, parts: [{ text: m.text }] });
+        } else {
+          const last = validContents[validContents.length - 1];
+          if (last.role === role) {
+            last.parts[0].text += '\n' + m.text;
+          } else {
+            validContents.push({ role, parts: [{ text: m.text }] });
+          }
+        }
+      }
+
       const response = await ai.models.generateContent({
         model: 'gemini-3.6-flash',
-        contents: messages.filter((m: any, index: number) => !(index === 0 && m.role === 'bot')).map((m: any) => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{text: m.text}] })),
+        contents: validContents,
         config: {
           systemInstruction: `You are an expert construction consultant for AGe GROUPS Construction (Tamil Nadu, India). 
           You provide high-level advice on residential, commercial, and engineering projects. 
@@ -47,7 +62,7 @@ async function startServer() {
       res.json({ text: response.text });
     } catch (error: any) {
       console.error('Gemini Error:', error);
-      res.status(500).json({ error: 'Failed to generate content', details: error.message, keyLength: getApiKey().length, keyStart: getApiKey().substring(0,4) });
+      res.status(500).json({ error: 'Failed to generate content', details: error.message });
     }
   });
 
@@ -55,7 +70,12 @@ async function startServer() {
   app.post('/api/parse', async (req, res) => {
     try {
       const { prompt } = req.body;
-      const ai = new GoogleGenAI({ apiKey: getApiKey() });
+      
+      const ai = new GoogleGenAI({ 
+        apiKey: getApiKey(),
+        httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+      });
+
       
       const response = await ai.models.generateContent({
         model: 'gemini-3.6-flash',
