@@ -1,26 +1,18 @@
 
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-
 export async function getConstructionAdvice(prompt: string) {
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
-      config: {
-        systemInstruction: `You are an expert construction consultant for AGe GROUPS Construction (Tamil Nadu, India). 
-        You provide high-level advice on residential, commercial, and engineering projects. 
-        IMPORTANT CONSTRAINT: AGe GROUPS ONLY operates within Kumbakonam, Thanjavur, Thiruvarur, and surrounding areas (strictly within a 50km radius of Kumbakonam). If a user asks for projects outside this area, politely inform them that you do not service that location.
-        Keep responses professional, concise, and helpful. 
-        If the user asks for a quote or wants to proceed, ask for their name, phone number, and project details (including location to verify it is within 50km).
-        Always mention that final estimates and technical details should be discussed directly with AGe GROUPS engineers at their office in Kumbakonam (Annai Complex, Anna Nagar) or via phone at +91 98425 69545.
-        Avoid specific price quotes, instead use ranges or factors that influence price.
-        Direct users to WhatsApp for immediate contact by providing this link: https://wa.me/919842569545`,
-        temperature: 0.7,
-      },
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
     });
-    return response.text;
+    
+    if (!response.ok) {
+      throw new Error(`Server returned ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.text;
   } catch (error) {
     console.error("Gemini Error:", error);
     return "I'm sorry, I'm having trouble connecting to my knowledge base right now. Please call us at +91 98425 69545 for direct assistance.";
@@ -29,34 +21,18 @@ export async function getConstructionAdvice(prompt: string) {
 
 export async function parseProjectFromText(prompt: string) {
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
-      config: {
-        systemInstruction: `You are an AI assistant that extracts project details from natural language text and returns a JSON object.
-        The JSON object must have the following fields:
-        - title (string)
-        - category (string: e.g., 'Residential', 'Commercial', 'Educational', 'Healthcare', 'Religious')
-        - status (string: e.g., 'Completed', 'Ongoing')
-        - location (string)
-        - description (string)
-        - imageUrl (string: provide a relevant placeholder image URL from Unsplash if not specified, e.g., 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80')
-        - images (array of objects, optional, each containing 'url' and 'type' where type is 'interior', 'exterior', or 'general')
-        
-        Return ONLY valid JSON. No markdown formatting, no backticks.`,
-        temperature: 0.1,
-      },
+    const response = await fetch('/api/parse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
     });
     
-    let text = response.text || '';
-    // Clean up potential markdown formatting
-    if (text.startsWith('```json')) {
-      text = text.replace(/```json\n?/, '').replace(/```\n?$/, '');
-    } else if (text.startsWith('```')) {
-      text = text.replace(/```\n?/, '').replace(/```\n?$/, '');
+    if (!response.ok) {
+      throw new Error(`Server returned ${response.status}`);
     }
     
-    return JSON.parse(text.trim());
+    const { data } = await response.json();
+    return data;
   } catch (error) {
     console.error("Gemini Parse Error:", error);
     throw new Error("Failed to parse project details from text.");

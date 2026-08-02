@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Loader2 } from 'lucide-react';
+import Markdown from 'react-markdown';
 import { getConstructionAdvice } from '../services/gemini';
 import { db, OperationType, handleFirestoreError } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -7,7 +8,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 const Assistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ role: 'bot' | 'user'; text: string }[]>([
-    { role: 'bot', text: 'Welcome to AGe GROUPS. How can I assist with your construction inquiry today? If you want a quote, please provide your name, phone number, and project details.' }
+    { role: 'bot', text: 'Hello! Welcome to **AGe GROUPS Construction**, your expert partner for residential, commercial, and engineering projects. We specialize in high-quality construction services exclusively within **Kumbakonam, Thanjavur, Thiruvarur**, and surrounding areas (strictly within a **50km radius of Kumbakonam**).\n\nHow can I assist you with your project today? If you would like to discuss a specific project or request a consultation, please provide:\n1. Your **Name**\n2. **Phone Number**\n3. **Project Details** (including the specific location to verify it is within our service area).\n\nFor immediate assistance, you can connect with us on WhatsApp here: [https://wa.me/919842569545](https://wa.me/919842569545)\n\n*Please note: Final estimates and technical blueprints should be discussed directly with our engineers at our office in Kumbakonam (Annai Complex, Anna Nagar) or via phone at +91 98425 69545.*' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -90,7 +91,7 @@ const Assistant: React.FC = () => {
                     ? 'bg-blue-900 text-white rounded-sm rounded-tr-none shadow-md' 
                     : 'bg-white text-slate-700 shadow-sm border border-slate-200 rounded-sm rounded-tl-none'
                 }`}>
-                  {m.text}
+                  <div className="markdown-body [&>p]:mb-2 [&>ul]:list-disc [&>ul]:pl-4 [&>ol]:list-decimal [&>ol]:pl-4 [&_a]:underline [&_a]:text-blue-500"><Markdown>{m.text}</Markdown></div>
                 </div>
               </div>
             ))}
