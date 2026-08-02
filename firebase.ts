@@ -3,9 +3,22 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import firebaseConfig from './firebase-applet-config.json';
 
-const app = initializeApp(firebaseConfig);
+const customConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+};
+
+const finalConfig = customConfig.apiKey ? customConfig : firebaseConfig;
+const databaseId = customConfig.apiKey ? (import.meta.env.VITE_FIRESTORE_DATABASE_ID || '(default)') : firebaseConfig.firestoreDatabaseId;
+
+
+const app = initializeApp(finalConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, databaseId as string);
 export const googleProvider = new GoogleAuthProvider();
 
 export enum OperationType {

@@ -4,14 +4,11 @@ import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 
 function getApiKey() {
-  let key = (process.env.GEMINI_API_KEY || '').trim();
-  if (key === 'AIzaSyC8548WAxLIViuUIEu1diN27zjbhhRW0PQ') {
-    key = ''; // Ignore leaked key
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) {
+    console.warn('GEMINI_API_KEY environment variable is missing.');
   }
-  if (!key || key === 'MY_GEMINI_API_KEY' || key === 'undefined') {
-    key = (process.env.Default_Gemini_API_Key || '').trim();
-  }
-  return key;
+  return key || '';
 }
 
 async function startServer() {
@@ -21,6 +18,7 @@ async function startServer() {
 
   app.use(express.json());
 
+
   // API Route for Chatbot
   app.post('/api/chat', async (req, res) => {
     try {
@@ -28,6 +26,7 @@ async function startServer() {
       
       
       const ai = new GoogleGenAI({ apiKey: getApiKey() });
+      
       
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -48,7 +47,7 @@ async function startServer() {
       res.json({ text: response.text });
     } catch (error: any) {
       console.error('Gemini Error:', error);
-      res.status(500).json({ error: 'Failed to generate content', details: error.message });
+      res.status(500).json({ error: 'Failed to generate content', details: error.message, keyLength: getApiKey().length, keyStart: getApiKey().substring(0,4) });
     }
   });
 

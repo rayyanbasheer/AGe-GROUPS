@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { collection, getDocs, addDoc, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
-import { auth, db, googleProvider } from '../firebase';
+import { auth, db } from '../firebase';
 import { parseProjectFromText } from '../services/gemini';
 import { Loader2, Plus, Trash2, LogOut, Sparkles, LayoutDashboard, MessageSquare } from 'lucide-react';
 import { GALLERY_IMAGES } from '../constants';
@@ -12,6 +12,7 @@ const Admin: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
   const [aiInput, setAiInput] = useState('');
+  const [aiImageUrl, setAiImageUrl] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'projects' | 'leads'>('projects');
 
@@ -27,12 +28,19 @@ const Admin: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleLogin = async () => {
+  
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError('');
     try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (error) {
-      console.error("Login failed:", error);
-      alert("Login failed. Please try again.");
+      if (isSignUp) {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+      }
+    } catch (error: any) {
+      console.error("Auth failed:", error);
+      setAuthError(error.message || "Authentication failed.");
     }
   };
 
@@ -85,6 +93,11 @@ const Admin: React.FC = () => {
       }
     }
   };
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [authError, setAuthError] = useState('');
 
   const [manualProject, setManualProject] = useState({
     title: '',
@@ -145,11 +158,15 @@ const Admin: React.FC = () => {
     setIsAiLoading(true);
     try {
       const projectData = await parseProjectFromText(aiInput);
+      if (aiImageUrl.trim()) {
+        projectData.imageUrl = aiImageUrl;
+      }
       await addDoc(collection(db, 'projects'), {
         ...projectData,
         createdAt: Timestamp.now()
       });
       setAiInput('');
+      setAiImageUrl('');
       fetchProjects();
       alert("Project added successfully via AI!");
     } catch (error) {
@@ -163,22 +180,47 @@ const Admin: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <Loader2 className="w-8 h-8 text-blue-900 animate-spin" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="bg-white p-8 rounded-sm shadow-2xl max-w-md w-full text-center border-t-4 border-blue-900">
           <h2 className="text-2xl font-black text-blue-950 mb-6 uppercase tracking-tight">Admin Portal</h2>
-          <p className="text-slate-500 mb-8 text-sm">Sign in with an authorized Google account to manage website content.</p>
-          <button
-            onClick={handleLogin}
-            className="w-full bg-blue-900 text-white py-3 rounded-sm font-black uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors shadow-lg"
+          <p className="text-slate-500 mb-6 text-sm">Sign in to manage website content.</p>
+          
+          <form onSubmit={handleAuth} className="space-y-4 text-left">
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Email</label>
+              <input 
+                type="email" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                className="w-full bg-slate-50 border border-slate-200 rounded-sm py-2 px-3 text-sm"
+                required 
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Password</label>
+              <input 
+                type="password" 
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                className="w-full bg-slate-50 border border-slate-200 rounded-sm py-2 px-3 text-sm"
+                required 
+              />
+            </div>
+            
+            {authError && <p className="text-red-500 text-xs font-bold">{authError}</p>}
+            
+            <button
+              type="submit"
+              className="w-full bg-blue-900 text-white py-3 rounded-sm font-black uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors shadow-lg mt-4"
+            >
+              {isSignUp ? 'Sign Up' : 'Sign In'}
+            </button>
+          </form>
+          
+          <button 
+            onClick={() => setIsSignUp(!isSignUp)}
+            className="mt-6 text-xs text-blue-600 hover:text-blue-800 font-bold"
           >
-            Sign in with Google
+            {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
           </button>
         </div>
       </div>
@@ -256,8 +298,16 @@ const Admin: React.FC = () => {
                   <textarea
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}
-                    placeholder="e.g., Add a completed residential villa project in Tanjore. It has an exterior image at URL..."
+                    placeholder="e.g., Add a completed residential villa project in Tanjore..."
                     className="w-full h-32 bg-slate-50 border border-slate-200 rounded-sm py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900 resize-none"
+                    disabled={isAiLoading}
+                  />
+                  <input 
+                    type="url"
+                    value={aiImageUrl}
+                    onChange={(e) => setAiImageUrl(e.target.value)}
+                    placeholder="Optional: Main Image URL for AI Project"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-sm py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
                     disabled={isAiLoading}
                   />
                   <button
