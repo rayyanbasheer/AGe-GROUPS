@@ -1,24 +1,27 @@
 import { GoogleGenAI } from '@google/genai';
 
 function getApiKey() {
-  let key = (process.env.GEMINI_API_KEY || '').trim();
-  if (!key || key === 'MY_GEMINI_API_KEY' || key === 'undefined') {
-    key = (process.env.Default_Gemini_API_Key || '').trim();
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) {
+    console.warn('GEMINI_API_KEY environment variable is missing.');
   }
-  return key;
+  return key || '';
 }
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
     const { prompt } = req.body;
-    const ai = new GoogleGenAI({ apiKey: getApiKey() });
+    const ai = new GoogleGenAI({ 
+      apiKey: getApiKey(),
+      httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+    });
     
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-3.6-flash',
       contents: prompt,
       config: {
         systemInstruction: `You are an AI assistant that extracts project details from natural language text and returns a JSON object.
@@ -46,6 +49,6 @@ export default async function handler(req, res) {
     res.status(200).json({ data: JSON.parse(text.trim()) });
   } catch (error) {
     console.error('Gemini Parse Error:', error);
-    res.status(500).json({ error: 'Failed to parse project details' });
+    res.status(500).json({ error: 'Failed to parse project details', details: error.message });
   }
 }

@@ -1,25 +1,43 @@
 import { GoogleGenAI } from '@google/genai';
 
 function getApiKey() {
-  let key = (process.env.GEMINI_API_KEY || '').trim();
-  if (!key || key === 'MY_GEMINI_API_KEY' || key === 'undefined') {
-    key = (process.env.Default_Gemini_API_Key || '').trim();
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) {
+    console.warn('GEMINI_API_KEY environment variable is missing.');
   }
-  return key;
+  return key || '';
 }
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
-    const { prompt } = req.body;
-    const ai = new GoogleGenAI({ apiKey: getApiKey() });
+    const { messages } = req.body;
+    const ai = new GoogleGenAI({ 
+      apiKey: getApiKey(),
+      httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+    });
     
+    let validContents = [];
+    for (const m of messages) {
+      const role = m.role === 'bot' ? 'model' : 'user';
+      if (validContents.length === 0) {
+        if (role === 'user') validContents.push({ role, parts: [{ text: m.text }] });
+      } else {
+        const last = validContents[validContents.length - 1];
+        if (last.role === role) {
+          last.parts[0].text += '\n' + m.text;
+        } else {
+          validContents.push({ role, parts: [{ text: m.text }] });
+        }
+      }
+    }
+
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
+      model: 'gemini-3.6-flash',
+      contents: validContents,
       config: {
         systemInstruction: `You are an expert construction consultant for AGe GROUPS Construction (Tamil Nadu, India). 
         You provide high-level advice on residential, commercial, and engineering projects. 
@@ -36,6 +54,6 @@ export default async function handler(req, res) {
     res.status(200).json({ text: response.text });
   } catch (error) {
     console.error('Gemini Error:', error);
-    res.status(500).json({ error: 'Failed to generate content' });
+    res.status(500).json({ error: 'Failed to generate content', details: error.message });
   }
 }

@@ -8,6 +8,12 @@ export async function getConstructionAdvice(messages: {role: string, text: strin
     });
     
     if (!response.ok) {
+      if (response.status === 429 || response.status === 500) {
+        const errorData = await response.json().catch(() => ({}));
+        if (errorData.details && errorData.details.includes('429')) {
+          return "I'm sorry, our AI service is currently at capacity (API Quota Exceeded). Please try again later or contact us directly at +91 98425 69545.";
+        }
+      }
       throw new Error(`Server returned ${response.status}`);
     }
     
