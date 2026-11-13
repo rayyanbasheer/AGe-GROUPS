@@ -24,14 +24,14 @@ export const translations = {
       awards: 'Regional Engineering Recognitions'
     },
     estimator: {
-      title: 'Construction Budget Calculator',
-      desc: 'Estimate baseline structural and finishing costs using current Cauvery Delta material rates.',
+      title: 'Construction Requirement & Scope Planner',
+      desc: 'Configure your built-up area and specification scope. Final sq.ft rates are tailored to your exact structural and material requirements.',
       area: 'Built-Up Area (Sq. Ft)',
       type: 'Building Classification',
       res: 'Residential',
       com: 'Commercial',
-      total: 'Estimated Construction Cost',
-      disclaimer: 'Indicative baseline estimate based on standard specifications. Final structural BOQ is prepared after soil testing and architectural blueprint review.'
+      total: 'Quotation Basis',
+      disclaimer: 'Per-sq.ft rates are determined based on your specific requirements, soil conditions, elevation design, and material selections after an engineer consultation.'
     }
   },
   ta: {
@@ -59,14 +59,14 @@ export const translations = {
       awards: 'விருதுகள்'
     },
     estimator: {
-      title: 'கட்டுமான செலவு மதிப்பீடு',
-      desc: 'உங்கள் திட்டத்திற்கான தோராயமான பட்ஜெட்டை அறியுங்கள்.',
+      title: 'கட்டுமானத் திட்டமிடல் மற்றும் மதிப்பீடு',
+      desc: 'கட்டுமான சதுர அடி (Sq. Ft) விலை உங்கள் தேவைகள் மற்றும் பொருட்களின் தரத்தைப் பொறுத்துத் தீர்மானிக்கப்படும்.',
       area: 'பரப்பளவு (சதுர அடி)',
       type: 'திட்ட வகை',
       res: 'குடியிருப்பு',
       com: 'வணிக வளாகம்',
-      total: 'தோராயமான செலவு',
-      disclaimer: 'இது ஒரு தோராயமான மதிப்பீடு மட்டுமே. நேரில் இடத்தை ஆய்வு செய்த பின் துல்லியமான மதிப்பீடு வழங்கப்படும்.'
+      total: 'மதிப்பீட்டு முறை',
+      disclaimer: 'சதுர அடி விலை உங்கள் கட்டட வடிவமைப்பு, மண் பரிசோதனை மற்றும் கட்டுமானப் பொருட்களின் தேர்வைப் பொறுத்து நேரில் ஆலோசித்து வழங்கப்படும்.'
     }
   }
 };
