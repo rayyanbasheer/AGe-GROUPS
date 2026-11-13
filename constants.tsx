@@ -100,18 +100,6 @@ export const DEFAULT_PROJECTS = [
     images: [
       { url: '/assets/aistudio/image_e27d6743.png', type: 'exterior' }
     ]
-  },
-  {
-    id: 'modern-duplex-residence',
-    title: 'Modern Duplex Residence & Elevation',
-    category: 'Residential',
-    status: 'Completed · G + 1',
-    location: 'Kumbakonam, Tamil Nadu',
-    description: 'A modern residential home designed with angular parapet geometry, cantilevered balconies, custom steel security grillwork, and a paved courtyard entrance.',
-    imageUrl: '/assets/aistudio/image_b051536c.png',
-    images: [
-      { url: '/assets/aistudio/image_b051536c.png', type: 'exterior' }
-    ]
   }
 ];
 
