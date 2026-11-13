@@ -1,101 +1,194 @@
-
-import React from 'react';
-import { Target, Eye, Shield, Users2, Check, ClipboardCheck, Search, PencilRuler, Construction, Key } from 'lucide-react';
+import React, { useState } from 'react';
+import { Target, Eye, ClipboardCheck, Search, PencilRuler, Construction, Key, HardHat } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 
-const About: React.FC = () => {
+interface AboutProps {
+  embedded?: boolean;
+}
+
+const ABOUT_IMAGE = '/src/assets/images/about_engineering_team_1794544868413.jpg';
+
+const About: React.FC<AboutProps> = ({ embedded = false }) => {
   const { t, lang } = useLanguage();
+  const [imgError, setImgError] = useState(false);
 
   const processSteps = [
-    { title: lang === 'en' ? 'Consultation' : 'ஆலோசனை', icon: <Search className="w-6 h-6" /> },
-    { title: lang === 'en' ? 'Planning' : 'திட்டமிடல்', icon: <PencilRuler className="w-6 h-6" /> },
-    { title: lang === 'en' ? 'Approval' : 'அனுமதி', icon: <ClipboardCheck className="w-6 h-6" /> },
-    { title: lang === 'en' ? 'Construction' : 'கட்டுமானம்', icon: <Construction className="w-6 h-6" /> },
-    { title: lang === 'en' ? 'Handover' : 'ஒப்படைப்பு', icon: <Key className="w-6 h-6" /> },
+    {
+      num: '01',
+      title: lang === 'en' ? 'Site Consultation' : 'ஆலோசனை',
+      desc: lang === 'en' ? 'Soil inspection, plot verification, and requirement mapping within 50 km of Kumbakonam.' : 'இட ஆய்வு மற்றும் தேவைகள் மதிப்பீடு.',
+      icon: <Search className="w-5 h-5" />
+    },
+    {
+      num: '02',
+      title: lang === 'en' ? 'Architectural & Structural Plan' : 'திட்டமிடல்',
+      desc: lang === 'en' ? '2D/3D floor layouts, Vasthu alignment, and IS-code structural load calculations.' : 'கட்டடக்கலை மற்றும் கட்டமைப்பு வடிவமைப்பு.',
+      icon: <PencilRuler className="w-5 h-5" />
+    },
+    {
+      num: '03',
+      title: lang === 'en' ? 'Statutory Approvals' : 'அனுமதி',
+      desc: lang === 'en' ? 'DTCP, municipal plan sanctions, and transparent bill-of-quantities sign-off.' : 'அரசு அனுமதி மற்றும் திட்ட ஒப்புதல்.',
+      icon: <ClipboardCheck className="w-5 h-5" />
+    },
+    {
+      num: '04',
+      title: lang === 'en' ? 'Construction' : 'கட்டுமானம்',
+      desc: lang === 'en' ? 'Stage-wise civil execution supervised daily by senior resident engineers.' : 'தேர்ந்தெடுக்கப்பட்ட பொறியாளர்களின் நேரடி மேற்பார்வையில் கட்டுமானம்.',
+      icon: <Construction className="w-5 h-5" />
+    },
+    {
+      num: '05',
+      title: lang === 'en' ? 'Quality Handover' : 'ஒப்படைப்பு',
+      desc: lang === 'en' ? 'Multi-point structural, plumbing, and electrical audit prior to key handover.' : 'முழுமையான தரப் பரிசோதனைக்குப் பின் ஒப்படைப்பு.',
+      icon: <Key className="w-5 h-5" />
+    },
   ];
 
   return (
-    <div className="pt-0 pb-20">
-      <section className="bg-blue-950 pt-48 pb-32 text-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '30px 30px'}}></div>
-        </div>
-        <div className="max-w-4xl mx-auto px-4 relative z-10">
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter">{t.nav.about}</h1>
-          <p className="text-xl text-slate-300 font-medium uppercase tracking-widest">Building Trust Since 1995</p>
+    <div className={embedded ? 'py-20 lg:py-24 bg-white border-b border-slate-200 overflow-hidden' : 'pt-16 pb-20 bg-white overflow-hidden'}>
+      {!embedded && (
+        <section className="bg-slate-900 py-20 text-center border-b border-slate-800">
+          <div className="max-w-4xl mx-auto px-4">
+            <p className="text-sm font-medium text-blue-300 mb-2">Established 1995 · Kumbakonam</p>
+            <h1 className="text-4xl md:text-5xl font-display font-bold text-white tracking-tight text-balance">
+              {t.nav.about}
+            </h1>
+          </div>
+        </section>
+      )}
+
+      {/* Who We Are Split */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-stretch">
+          <motion.div
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-6 flex flex-col justify-center"
+          >
+            <p className="text-sm font-semibold text-[#000080] mb-2">
+              01. Heritage &amp; Engineering Practice
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 mb-6 tracking-tight text-balance">
+              Three decades of structural integrity across the Cauvery Delta
+            </h2>
+            <div className="space-y-4 text-slate-600 leading-relaxed text-base">
+              <p>
+                Founded in <strong className="text-slate-900 font-semibold">1995 in Kumbakonam, Thanjavur District</strong>, AGe Groups Construction and our affiliate practice, <strong className="text-slate-900 font-semibold">Consulting Engineers</strong>, have delivered over 500 residential, commercial, and institutional landmarks.
+              </p>
+              <p>
+                We intentionally focus our operations within a strict <strong className="text-slate-900 font-semibold">50 km radius of Kumbakonam</strong> (covering Kumbakonam, Thanjavur, Thiruvarur, Mayiladuthurai, and Papanasam) so our principal engineers can inspect every site personally at every concrete pour.
+              </p>
+            </div>
+
+            {/* Vision & Mission Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 pt-8 border-t border-slate-200">
+              <div className="p-5 rounded-lg bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-2.5 mb-2">
+                  <Eye className="w-5 h-5 text-[#000080]" />
+                  <h3 className="font-display font-semibold text-base text-slate-900">Our Vision</h3>
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  To set the regional benchmark in South India for durable, climate-responsive, and cost-transparent civil engineering.
+                </p>
+              </div>
+              <div className="p-5 rounded-lg bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-2.5 mb-2">
+                  <Target className="w-5 h-5 text-[#000080]" />
+                  <h3 className="font-display font-semibold text-base text-slate-900">Our Mission</h3>
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  To execute every foundation, column, and finish with documented quality control, zero hidden escalations, and on-time delivery.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-6 flex flex-col"
+          >
+            <div className="rounded-lg overflow-hidden border border-slate-200 bg-slate-100 h-full min-h-[320px] flex flex-col justify-between group">
+              {!imgError ? (
+                <img
+                  src={ABOUT_IMAGE}
+                  alt="Senior civil engineers reviewing structural blueprints on construction site"
+                  referrerPolicy="no-referrer"
+                  onError={() => setImgError(true)}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : (
+                <div className="w-full h-full min-h-[320px] flex flex-col items-center justify-center p-8 text-center bg-slate-100">
+                  <HardHat className="w-10 h-10 text-[#000080] mb-3" />
+                  <p className="font-display font-semibold text-slate-900">On-Site Structural Supervision</p>
+                  <p className="text-xs text-slate-600 mt-1">Principal Engineers on every project in Kumbakonam</p>
+                </div>
+              )}
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Process Section - NEW FEATURE */}
-      <section className="py-24 bg-slate-50 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl font-black text-blue-950 uppercase tracking-tighter">
-              {lang === 'en' ? 'Our 5-Step Journey' : 'எங்கள் 5-நிலை பயணம்'}
+      {/* 5-Step Process Section with Animated Structural Beam */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 pt-16 border-t border-slate-200">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div>
+            <p className="text-sm font-semibold text-[#000080] mb-1">
+              02. Execution Methodology
+            </p>
+            <h3 className="text-2xl sm:text-3xl font-display font-bold text-slate-900 tracking-tight">
+              {lang === 'en' ? 'Our 5-Stage Construction Workflow' : 'எங்கள் 5-நிலை கட்டுமான செயல்முறை'}
             </h3>
           </div>
-          <div className="relative">
-            <div className="absolute top-1/2 left-0 w-full h-1 bg-blue-900/10 -translate-y-1/2 hidden lg:block"></div>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
-              {processSteps.map((step, i) => (
-                <div key={i} className="relative z-10 flex flex-col items-center group">
-                  <div className="w-16 h-16 bg-white border-2 border-blue-900 text-blue-900 flex items-center justify-center rounded-sm mb-6 group-hover:bg-blue-900 group-hover:text-white transition-all shadow-xl">
-                    {step.icon}
-                  </div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-2">Step 0{i+1}</span>
-                  <h4 className="text-xs font-black uppercase tracking-widest text-blue-950">{step.title}</h4>
+          <p className="text-sm text-slate-600 max-w-md">
+            Every project follows a documented engineering schedule with stage-by-stage structural sign-offs.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 relative">
+          {processSteps.map((step, idx) => (
+            <motion.div
+              key={step.num}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.4, delay: idx * 0.08 }}
+              whileHover={{ y: -4 }}
+              className="p-6 bg-slate-50 border border-slate-200 rounded-lg flex flex-col justify-between hover:border-[#000080]/40 hover:bg-white transition-all group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-mono-tabular text-xs font-semibold text-[#000080]">
+                    Stage {step.num}
+                  </span>
+                  <div className="text-slate-700 group-hover:text-[#000080] transition-colors">{step.icon}</div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div>
-            <div className="w-16 h-1 bg-blue-900 mb-8"></div>
-            <h2 className="text-3xl md:text-5xl font-black text-blue-950 mb-8 uppercase tracking-tighter">Who We Are</h2>
-            <div className="space-y-6 text-slate-600 leading-relaxed text-lg font-medium">
-              <p>
-                AGe Groups Construction, along with its affiliate <strong>Consulting Engineers</strong>, 
-                was founded in <strong>1995 in Kumbakonam, Thanjavur District</strong>.
-              </p>
-              <p>
-                With over <strong>30+ years of dedicated experience</strong>, our company has built 
-                a strong reputation for maintaining quality in every detail. 
-              </p>
-            </div>
-          </div>
-          <div className="relative group">
-            <img 
-              src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1000" 
-              className="rounded-sm shadow-2xl relative z-10 grayscale hover:grayscale-0 transition-all duration-700"
-              alt="Engineering work"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-blue-950 p-16 rounded-sm text-white shadow-2xl relative overflow-hidden group">
-              <Eye className="w-12 h-12 text-slate-400 mb-8" />
-              <h3 className="text-3xl font-black mb-6 uppercase tracking-widest">Our Vision</h3>
-              <p className="text-slate-300 text-lg leading-relaxed font-medium">
-                To become one of the most trusted construction companies in South India by delivering innovative, 
-                sustainable, and high-quality construction solutions.
-              </p>
-            </div>
-            <div className="bg-slate-200 p-16 rounded-sm text-blue-950 shadow-lg group">
-              <Target className="w-12 h-12 text-blue-900 mb-8" />
-              <h3 className="text-3xl font-black mb-6 uppercase tracking-widest">Our Mission</h3>
-              <p className="text-blue-900/80 text-lg leading-relaxed font-medium">
-                To build durable and modern structures while maintaining the highest standards of quality, safety, and customer satisfaction.
-              </p>
-            </div>
-          </div>
+                <h4 className="font-display font-semibold text-base text-slate-900 mb-2">
+                  {step.title}
+                </h4>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  {step.desc}
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/70">
+                <div className="w-full h-1 bg-slate-200 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${(idx + 1) * 20}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, delay: 0.15 + idx * 0.1 }}
+                    className="h-full bg-[#000080]"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
     </div>

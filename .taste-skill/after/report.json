@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-11-12T20:47:45-08:00",
+  "stage": "after",
+  "route": "http://localhost:3000/",
+  "measurements": {
+    "fonts": {
+      "display": "Plus Jakarta Sans (weights 600, 700, tight tracking -0.02em, text-wrap: balance, natural title case)",
+      "body": "Public Sans (weights 400, 500, 600, 15px-16px comfortable prose)",
+      "monospace": "JetBrains Mono with font-variant-numeric: tabular-nums on all KPIs, square footage sliders, and INR cost estimates"
+    },
+    "color_and_contrast": {
+      "distribution": "60% neutral canvas (#f8fafc / #ffffff), 30% structural slate surfaces (#0f172a hero/footer, 1px hairline border-slate-200), 10% brand navy accent (#000080)",
+      "wcag_contrast": "All text pairs pass WCAG AA (4.5:1+ for body text, 7:1+ for primary headings and KPI figures)"
+    },
+    "frame_and_layout": {
+      "top_bar_contract": "Strict 3-zone single-row header (Zone 1: single-line AGe Groups wordmark; Zone 2: 5 single-line nav links with active/hover underline; Zone 3: 1 primary Request Proposal CTA)",
+      "home_composition": "Eliminated 4 redundant stacked sub-page dark banners and duplicate calculator; embedded sections now follow Proposition -> Heritage & 5-Stage Process -> Bento Capabilities & Cost Estimator -> Proof Portfolio -> Lead Capture Proposal Form",
+      "hero_split": "2-column stretched split (items-stretch) with full-width 4-column tabular KPI row below",
+      "mobile_sticky_cap": "Compact h-16 header + compact floating triggers stay well under the 15% mobile viewport height budget"
+    },
+    "anti_slop_and_states": [
+      "Removed decorative pulsing dots in Hero and Assistant",
+      "Replaced all-caps shouting across inputs, labels, and cards with natural editorial title case and sentence case",
+      "Replaced pill badges on project cards with clean unboxed metadata separated by middots (Residential · Kumbakonam, TN · Completed)",
+      "Generated 5 local high-fidelity architectural & civil engineering images via generate_image with resilient onError fallbacks and referrerPolicy='no-referrer'",
+      "Replaced window.alert in Contact.tsx with an accessible inline role='alert' banner"
+    ]
+  }
+}

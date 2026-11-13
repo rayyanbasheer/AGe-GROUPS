@@ -31,8 +31,8 @@ export default async function handler(req, res) {
         - status (string: e.g., 'Completed', 'Ongoing')
         - location (string)
         - description (string)
-        - imageUrl (string: provide a relevant placeholder image URL from Unsplash if not specified, e.g., 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80')
-        - images (array of objects, optional, each containing 'url' and 'type' where type is 'interior', 'exterior', or 'general')
+        - imageUrl (string: if a URL is provided in the text use it, otherwise empty string '')
+        - images (array of objects: ONLY include if additional image URLs are explicitly provided in the prompt, otherwise return an empty array [])
         
         Return ONLY valid JSON. No markdown formatting, no backticks.`,
         temperature: 0.1,

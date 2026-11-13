@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-11-12T20:40:30-08:00",
+  "stage": "before",
+  "route": "http://localhost:3000/",
+  "measurements": {
+    "fonts": {
+      "body": "Inter (banned generic default)",
+      "heading": "Montserrat (all-caps shouting across all headings and inputs)",
+      "monospace": "none (missing tabular-nums on cost estimators and KPIs)"
+    },
+    "color_and_contrast": {
+      "brand_navy": "#000080 (raw web navy, harsh saturation)",
+      "canvas": "#f8fafc (slate-50)",
+      "issues": [
+        "Overuse of heavy bg-blue-950 banners repeated 4 times consecutively on Home page (Home includes About, Services, Projects, Contact sub-heroes each with pt-48 pb-32 bg-blue-950 banners)",
+        "Low contrast text-slate-400 on bg-blue-950 and text-[10px] all-caps tracking-[0.4em] micro-labels",
+        "Thick border-t-4, border-b-8, and border-2 boxes violating single-elevation and hairline border discipline"
+      ]
+    },
+    "frame_and_layout": {
+      "top_bar_contract": "Violated (Logo has extra grey box pill, nav has language switcher + CTA + all-caps tracking-[0.2em])",
+      "home_composition": "Broken composition: Home.tsx embeds full <About />, <Services />, <Projects />, and <Contact /> page components directly, causing 5 full-screen dark hero headers stacked on a single page and duplicate cost estimators (<CostEstimator /> + <QuotationGenerator />)",
+      "mobile_sticky_cap": "Two overlapping fixed buttons at bottom-right (Assistant and WhatsAppButton)"
+    },
+    "anti_slop_violations": [
+      "Pulsing decorative dot in Hero badge (w-2 h-2 bg-white rounded-full animate-pulse)",
+      "Pill badge in Projects cards (bg-blue-900 px-3 py-1 text-[10px] uppercase)",
+      "All-caps shouting across form inputs, labels, paragraphs, and buttons",
+      "Fragile external URLs (images.unsplash.com, picsum.photos, transparenttextures.com)",
+      "window.alert used in Contact.tsx error handler"
+    ]
+  }
+}
