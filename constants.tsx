@@ -90,15 +90,15 @@ export const DEFAULT_PROJECTS = [
     ]
   },
   {
-    id: 'contemporary-elevation-residence',
-    title: 'Contemporary G+1 Residence',
+    id: 'mr-riyas-residence',
+    title: 'Mr. Riyas Residence',
     category: 'Residential',
-    status: 'Completed · G + 1',
-    location: 'Kumbakonam, Tamil Nadu',
-    description: 'A striking two-story contemporary residence featuring geometric stone cladding, terracotta jaali ventilation screens, and warm recessed architectural lighting.',
-    imageUrl: '/assets/aistudio/image_e27d6743.png',
+    status: 'Residence · G + 1 · ~ 2,200 sq.ft',
+    location: 'Govindakudi',
+    description: 'A contemporary residence with a bold façade, textured finishes, and well-balanced proportions.',
+    imageUrl: '/assets/aistudio/image_fe371fd9.png',
     images: [
-      { url: '/assets/aistudio/image_e27d6743.png', type: 'exterior' }
+      { url: '/assets/aistudio/image_fe371fd9.png', type: 'exterior' }
     ]
   }
 ];

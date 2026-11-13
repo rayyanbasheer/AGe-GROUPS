@@ -181,7 +181,7 @@ const Contact: React.FC<ContactProps> = ({ embedded = false }) => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      placeholder="e.g., Ramesh Sundaram"
+                      placeholder="e.g., Ahmed"
                       className="w-full bg-white border border-slate-300 focus:border-[#000080] focus:ring-2 focus:ring-blue-900/20 rounded-md px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors"
                     />
                   </div>
